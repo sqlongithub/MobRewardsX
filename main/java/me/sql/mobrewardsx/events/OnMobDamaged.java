@@ -59,7 +59,7 @@ public class OnMobDamaged implements Listener {
 		int rewardedMoney = getRewardedMoney(plugin.getConfig(), e.getEntity());
 		int itemId = mobSection.getInt("item-rewarded");
 		// ugly code, basically if the mobsection has a custom chance, then use that, else use the chance from the item section
-		float chance = (mobSection.getInt("chance") / 100) == 0 ? itemsSection.getConfigurationSection(Integer.toString(itemId)).getInt("chance") : mobSection.getInt("chance");
+		float chance = (mobSection.getInt("chance") / 100) == 0 ? itemsSection.getConfigurationSection(Integer.toString(itemId)).getInt("chance")/100 : mobSection.getInt("chance")/100;
 		// Player killed
 		if(killer!=null) {
 			if(Math.random()<chance) {
