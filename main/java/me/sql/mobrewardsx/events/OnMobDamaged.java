@@ -31,9 +31,9 @@ import me.sql.mobrewardsx.util.VersionUtil;
 
 public class OnMobDamaged implements Listener {
 
-	Plugin plugin = Bukkit.getPluginManager().getPlugin("MobRewardsX");
+	private Plugin plugin = Bukkit.getPluginManager().getPlugin("MobRewardsX");
 	
-	Map<LivingEntity,Player> lastPlayerAttackers = new HashMap<>();
+	private Map<LivingEntity,Player> lastPlayerAttackers = new HashMap<>();
 	@EventHandler
 	public void onMobHitByPlayer(EntityDamageByEntityEvent e) {
 		if(!(e.getEntity() instanceof Creature)) {
@@ -56,7 +56,7 @@ public class OnMobDamaged implements Listener {
 			return;
 		}
 		Player killer = e.getEntity().getKiller();
-		int rewardedMoney = getRewardedMoney(plugin.getConfig(), e.getEntity());
+		int rewardedMoney = getRewardedMoney(e.getEntity());
 		int itemId = mobSection.getInt("item-rewarded");
 		// ugly code, basically if the mobsection has a custom chance, then use that, else use the chance from the item section
 		float chance = (mobSection.getInt("chance") / 100) == 0 ? itemsSection.getConfigurationSection(Integer.toString(itemId)).getInt("chance")/100 : mobSection.getInt("chance")/100;
@@ -96,13 +96,13 @@ public class OnMobDamaged implements Listener {
 		}
 	}
 	
-	private int getRewardedMoney(FileConfiguration config, LivingEntity mob) {
+	private int getRewardedMoney(LivingEntity mob) {
 		
 		ConfigurationSection mobSection = getMobSection(mob);
 		if(mob!=null && mobSection!=null) {
 			// Mob exists in config
 			return mobSection.getInt("money-rewarded");
-		};
+		}
 		return 0;
 	}
 	
