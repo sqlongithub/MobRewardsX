@@ -1,0 +1,94 @@
+# Set to true to gain rewards for 
+# the specified type of mob.
+passive: true # i.e chicken
+neutral: true # i.e wolf
+hostile: true # i.e zombie
+boss: true # i.e ender dragon
+
+kill-assist: true # Should a player should be rewarded, even though they only damaged the mob, which then was killed by a block or fall damage?
+
+# Here you can define custom items that can get dropped
+# when mobs are killed. 
+
+items:
+   0: # fallback
+      material: air
+      quantity: 0
+   1: # id 1
+      material: gold_ingot # a minecraft item id (i.e diamond_sword)
+      quantity: 1
+      name: "§6Reward Item"
+      chance: 50 # 50% default chance for this item to get dropped
+      lore: # Not required, can be removed
+         - "" # An empty lore line, so there is a gap between the enchants and the lore, i just think it looks nice.
+         - "§aLine 1 of the lore"
+         - "§aAnother lore line"
+      enchants: # Not required, can be removed
+         unbreaking: 10
+         fortune: 5
+
+
+# List of mobs, you can change the rewards you gain from them.
+# You only have to make settings if you want it to give rewards.
+# Sorry if this seems a little cluttered, you can remove the mobs
+# that dont give drops. The pre-defined values are just examples.
+
+mobs:
+   passive:
+      bat:
+      cat:
+         money-rewarded: -20 # no animal cruelty! takes 20 coins from the killer
+      chicken:
+         money-rewarded: 10
+      cod:
+      cow:
+         money-rewarded: 10
+         item-rewarded: 1 # type a custom item id, one of those you wrote above in the items section 
+         chance: 40 # overwrites the default 50% for this item, it is now 40%
+      donkey:
+      fox:
+      horse:
+      mooshrom:
+      mule:
+      ocelot:
+      parrot:
+      pig:
+         money-rewarded: 10
+      piglin: # adult is not passive
+         baby: 
+      polar_bear:
+         baby: # adult is not passive
+      pufferfish:
+      rabbit:
+      sheep:
+      skeleton_horse:
+      strider:
+      snowman: # aka. snow golem
+      squid:
+      tropical_fish:
+      turtle:
+      villager:
+   neutral:
+      bee:
+      cave_spider:
+      dolphin:
+      enderman:
+      iron_golem:
+      llama:
+      panda:
+      piglin:
+         adult:
+      polar_bear:
+         adult:
+      spider:
+      wolf:
+      zombified_piglin: # aka. zombie pigman
+   hostile:
+      blaze:
+      chicken_jockey:
+      zombie:
+         money-rewarded: 100
+   boss:
+      ender_dragon:
+      wither:
+   

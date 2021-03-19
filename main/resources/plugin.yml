@@ -1,0 +1,21 @@
+name: MobRewardsX
+version: 1.0
+main: me.sql.mobrewardsx.MobRewardsX
+author: imSQL
+description: A plugin that gives players rewards for killing mobs
+website: https://github.com/sqlongithub
+commands:
+    mobrewardsx:
+        description: MobRewardsX
+        alias: [mrx, mobrewards]
+        permission: mrx.mrx
+        usage: "§cUsage: /<command> [about|info|help]"
+permissions:
+    mrx.mrx:
+        description: "Allows the player to interact with MRX"
+        default: false
+    mrx.*:
+        description: "Gives the player superuser permissions for MRX"
+        default: false
+        children:
+            - mrx.mrx
