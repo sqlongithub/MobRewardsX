@@ -2,7 +2,7 @@ package me.sql.mobrewardsx.util;
 
 import org.bukkit.enchantments.Enchantment;
 
-public enum EnchantUtil_1_9 {
+public enum 1_9_EnchantUtil {
 
 	// 1.9.4 Enchants
 	AQUA_AFFINITY(Enchantment.WATER_WORKER),

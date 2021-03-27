@@ -217,12 +217,12 @@ public class OnMobDamaged implements Listener {
 			for(int i = mobTypes.length/2; i<mobTypes.length; i++) {
 				if(mobsSection.getConfigurationSection(mobTypes[i]).contains(mob.getType().toString().toLowerCase())) {
 					return mobsSection.getConfigurationSection(mobTypes[i]).getConfigurationSection(mob.getType().toString().toLowerCase());
-				};
+				}
 			}
 			for(int i = mobTypes.length/2-1; i>=0; i--) {
 				if(mobsSection.getConfigurationSection(mobTypes[i]).contains(mob.getType().toString().toLowerCase())) {
 					return mobsSection.getConfigurationSection(mobTypes[i]).getConfigurationSection(mob.getType().toString().toLowerCase());
-				};
+				}
 			}
 		}
 		return null;
@@ -252,11 +252,11 @@ public class OnMobDamaged implements Listener {
 				if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.12.2")) {
 					ench = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(s));
 				} else if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.11"))  {
-					ench = EnchantUtil_1_11_1.valueOf(s.toUpperCase()).getEnchant();
+					ench = 1_11_1_EnchantUtil.valueOf(s.toUpperCase()).getEnchant();
 				} else if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.8.8")) {
-					ench = EnchantUtil_1_9.valueOf(s.toUpperCase()).getEnchant();
+					ench = 1_9_EnchantUtil.valueOf(s.toUpperCase()).getEnchant();
 				} else if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.7.10"))  {
-					ench = EnchantUtil_1_8.valueOf(s.toUpperCase()).getEnchant();
+					ench = 1_8_EnchantUtil.valueOf(s.toUpperCase()).getEnchant();
 				}
 				if(ench == null) {
 					Bukkit.getLogger().info("[MobRewardsX] Enchantment "+s+" is not a valid enchant, item id: "+id);

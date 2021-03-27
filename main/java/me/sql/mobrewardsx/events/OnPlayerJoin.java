@@ -13,7 +13,7 @@ import me.sql.mobrewardsx.MobRewardsX;
 
 public class OnPlayerJoin implements Listener {
 
-	Map<Player, Boolean> firstJoinAfterStartup = new HashMap<Player, Boolean>();
+	private Map<Player, Boolean> firstJoinAfterStartup = new HashMap<Player, Boolean>();
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
