@@ -9,4 +9,4 @@ I admit, I am not the best programmer and the code is probably not that great, s
 
 ## Dependencies
 You **need** these plugins, and probably the latest version in order to be able to use this plugin.
-  - Vault
+- Vault
