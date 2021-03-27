@@ -108,7 +108,7 @@ public class MobCommand extends BaseCommand {
 	@CommandPermission("mrx.mob.deleterewards")
 	// Delete rewards
 	public void onDeleteRewards(CommandSender sender, @Name("Mob") String mobName, String settingCommand) {
-		if(settingCommand.toLowerCase().equalsIgnoreCase("delrewards")) {
+		if(settingCommand.equalsIgnoreCase("delrewards")) {
 			ConfigurationSection mobTypeSection = getTypeSection(mobName);
 			if(mobTypeSection==null) {
 				sender.sendMessage(Formatting.PREFIX.toString()+ChatColor.AQUA+"This mob doesn't have rewards!");
@@ -124,7 +124,7 @@ public class MobCommand extends BaseCommand {
 	@CommandPermission("mrx.mob.setmoneyreward")
 	// Set money reward
 	public void onSetMoneyReward(CommandSender sender, @Name("Mob") String mobName, String settingCommand, int moneyReward) {
-		if(settingCommand.toLowerCase().equalsIgnoreCase("setmoneyreward")) {
+		if(settingCommand.equalsIgnoreCase("setmoneyreward")) {
 			ConfigurationSection mobTypeSection = getTypeSection(mobName);
 			if(mobTypeSection==null) {
 				sender.sendMessage(Formatting.PREFIX.toString()+ChatColor.AQUA+"This mob doesn't have rewards! Please create settings for it.");
@@ -141,7 +141,7 @@ public class MobCommand extends BaseCommand {
 	@CommandPermission("mrx.mob.setitemreward")
 	// Set item reward
 	public void onSetItemReward(CommandSender sender, @Name("Mob") String mobName, String settingCommand, int itemRewardId) {
-		if(settingCommand.toLowerCase().equalsIgnoreCase("setitemreward")) {
+		if(settingCommand.equalsIgnoreCase("setitemreward")) {
 			ConfigurationSection mobTypeSection = getTypeSection(mobName);
 			if(mobTypeSection==null) {
 				sender.sendMessage(Formatting.PREFIX.toString()+ChatColor.AQUA+"This mob doesn't have rewards! Please create settings for it.");
@@ -158,7 +158,7 @@ public class MobCommand extends BaseCommand {
 	@CommandPermission("mrx.mob.setchance")
 	// Set money reward
 	public void onSetItemRewardChance(CommandSender sender, @Name("Mob") String mobName, String settingCommand, int itemRewardChance) {
-		if(settingCommand.toLowerCase().equalsIgnoreCase("setchance")) {
+		if(settingCommand.equalsIgnoreCase("setchance")) {
 			ConfigurationSection mobTypeSection = getTypeSection(mobName);
 			if(mobTypeSection==null) {
 				sender.sendMessage(Formatting.PREFIX.toString()+ChatColor.AQUA+"This mob doesn't have rewards! Please create settings for it.");
