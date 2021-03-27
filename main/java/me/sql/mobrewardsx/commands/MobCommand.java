@@ -58,12 +58,12 @@ public class MobCommand extends BaseCommand {
 			for(int i = mobTypes.length/2; i<mobTypes.length; i++) {
 				if(mobsSection.getConfigurationSection(mobTypes[i]).contains(mobName.toLowerCase())) {
 					return mobsSection.getConfigurationSection(mobTypes[i]);
-				};
+				}
 			}
 			for(int i = mobTypes.length/2-1; i>=0; i--) {
 				if(mobsSection.getConfigurationSection(mobTypes[i]).contains(mobName.toLowerCase())) {
 					return mobsSection.getConfigurationSection(mobTypes[i]);
-				};
+				}
 			}
 		}
 		return null;
