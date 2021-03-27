@@ -24,7 +24,6 @@ import net.milkbowl.vault.economy.Economy;
 public class MobRewardsX extends JavaPlugin {
 	
 	private static final Logger log = Logger.getLogger("Minecraft");
-	private PaperCommandManager manager;
 	private static Economy econ;	
 	public static final Properties properties = new Properties();
 	public static Map<Player, Boolean> allSoundNotifications;
@@ -67,8 +66,7 @@ public class MobRewardsX extends JavaPlugin {
 		
 		Bukkit.getPluginManager().registerEvents(new OnMobDamaged(), this);
 		Bukkit.getPluginManager().registerEvents(new OnPlayerJoin(), this);
-		
-		manager = new PaperCommandManager(this);
+		private PaperCommandManager manager = new PaperCommandManager(this);
 		manager.enableUnstableAPI("help");
 		manager.registerCommand(new MobRewardsXCommand());
 		manager.registerCommand(new ToggleSoundCommand());

@@ -40,30 +40,31 @@ public enum Formatting {
 	public static String translateToChatColor(String itemName) {
 		// Is there an easier way to do this?
 		String translatedString = itemName;
-		translatedString.replaceAll("§0", ChatColor.BLACK.toString());
-		translatedString.replaceAll("§1", ChatColor.DARK_BLUE.toString());
-		translatedString.replaceAll("§2", ChatColor.DARK_GREEN.toString());
-		translatedString.replaceAll("§3", ChatColor.DARK_AQUA.toString());
-		translatedString.replaceAll("§4", ChatColor.DARK_RED.toString());
-		translatedString.replaceAll("§5", ChatColor.DARK_PURPLE.toString());
-		translatedString.replaceAll("§6", ChatColor.GOLD.toString());
-		translatedString.replaceAll("§7", ChatColor.GRAY.toString());
-		translatedString.replaceAll("§8", ChatColor.DARK_GRAY.toString());
-		translatedString.replaceAll("§9", ChatColor.BLUE.toString());
+		translatedString = translatedString.replaceAll("§0", ChatColor.BLACK.toString());
+		translatedString = translatedString.replaceAll("§1", ChatColor.DARK_BLUE.toString());
+		translatedString = translatedString.replaceAll("§2", ChatColor.DARK_GREEN.toString());
+		translatedString = translatedString.replaceAll("§3", ChatColor.DARK_AQUA.toString());
+		translatedString = translatedString.replaceAll("§4", ChatColor.DARK_RED.toString());
+		translatedString = translatedString.replaceAll("§5", ChatColor.DARK_PURPLE.toString());
+		translatedString = translatedString.replaceAll("§6", ChatColor.GOLD.toString());
+		translatedString = translatedString.replaceAll("§7", ChatColor.GRAY.toString());
+
+		translatedString = translatedString.replaceAll("§8", ChatColor.DARK_GRAY.toString());
+		translatedString = translatedString.replaceAll("§9", ChatColor.BLUE.toString());
 		
-		translatedString.replaceAll("§a", ChatColor.GREEN.toString());
-		translatedString.replaceAll("§b", ChatColor.AQUA.toString());
-		translatedString.replaceAll("§c", ChatColor.RED.toString());
-		translatedString.replaceAll("§d", ChatColor.LIGHT_PURPLE.toString());
-		translatedString.replaceAll("§e", ChatColor.YELLOW.toString());
-		translatedString.replaceAll("§f", ChatColor.WHITE.toString());
+		translatedString = translatedString.replaceAll("§a", ChatColor.GREEN.toString());
+		translatedString = translatedString.replaceAll("§b", ChatColor.AQUA.toString());
+		translatedString = translatedString.replaceAll("§c", ChatColor.RED.toString());
+		translatedString = translatedString.replaceAll("§d", ChatColor.LIGHT_PURPLE.toString());
+		translatedString = translatedString.replaceAll("§e", ChatColor.YELLOW.toString());
+		translatedString = translatedString.replaceAll("§f", ChatColor.WHITE.toString());
 		
-		translatedString.replaceAll("§k", ChatColor.MAGIC.toString());
-		translatedString.replaceAll("§l", ChatColor.BOLD.toString());
-		translatedString.replaceAll("§m", ChatColor.STRIKETHROUGH.toString());
-		translatedString.replaceAll("§n", ChatColor.UNDERLINE.toString());
-		translatedString.replaceAll("§o", ChatColor.ITALIC.toString());
-		translatedString.replaceAll("§r", ChatColor.RESET.toString());
+		translatedString = translatedString.replaceAll("§k", ChatColor.MAGIC.toString());
+		translatedString = translatedString.replaceAll("§l", ChatColor.BOLD.toString());
+		translatedString = translatedString.replaceAll("§m", ChatColor.STRIKETHROUGH.toString());
+		translatedString = translatedString.replaceAll("§n", ChatColor.UNDERLINE.toString());
+		translatedString = translatedString.replaceAll("§o", ChatColor.ITALIC.toString());
+		translatedString = translatedString.replaceAll("§r", ChatColor.RESET.toString());
 		
 		return translatedString;
 	}
