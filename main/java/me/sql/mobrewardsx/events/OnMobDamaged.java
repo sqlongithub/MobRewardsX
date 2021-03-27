@@ -7,8 +7,8 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Creature;
@@ -28,6 +28,7 @@ import me.sql.mobrewardsx.util.EnchantUtil_1_11_1;
 import me.sql.mobrewardsx.util.EnchantUtil_1_8;
 import me.sql.mobrewardsx.util.EnchantUtil_1_9;
 import me.sql.mobrewardsx.util.VersionUtil;
+import net.md_5.bungee.api.ChatColor;
 
 public class OnMobDamaged implements Listener {
 
@@ -44,56 +45,146 @@ public class OnMobDamaged implements Listener {
 		}
 	}
 	
-	// TODO: Implement PvE Rewards. Started 18/3. Money reward finished 19/3
 	@EventHandler
 	public void onMobKilled(EntityDeathEvent e) {
 		if(!(e.getEntity() instanceof Creature) || e.getEntity().getLastDamageCause().getCause()==DamageCause.STARVATION) {
 			return;
 		}
+		
 		ConfigurationSection mobSection = getMobSection(e.getEntity());
 		ConfigurationSection itemsSection = plugin.getConfig().getConfigurationSection("items");
+		
 		if(mobSection==null) {
 			return;
 		}
+		
+		boolean soundPlayed = false;
 		Player killer = e.getEntity().getKiller();
 		int rewardedMoney = getRewardedMoney(e.getEntity());
 		int itemId = mobSection.getInt("item-rewarded");
 		// ugly code, basically if the mobsection has a custom chance, then use that, else use the chance from the item section
-		float chance = (mobSection.getInt("chance") / 100) == 0 ? itemsSection.getConfigurationSection(Integer.toString(itemId)).getInt("chance")/100 : mobSection.getInt("chance")/100;
+		double chance = mobSection.getDouble("chance") == 0 ? itemsSection.getConfigurationSection(Integer.toString(itemId)).getDouble("chance")/100 : mobSection.getDouble("chance")/100;
 		// Player killed
 		if(killer!=null) {
+			// The mob or item had a chance and we rolled a number in that range
 			if(Math.random()<chance) {
 				ItemStack rewardedItem = getItem(itemsSection, itemId);
+				// Item is valid
 				if(rewardedItem!=null) {
-					killer.getInventory().addItem(rewardedItem);
+					// Item has a name
+					soundPlayed = rewardItem(rewardedItem, killer, rewardedMoney, chance); 
 				} else {
 					Bukkit.getLogger().info("[MobRewardsX] The item at id "+itemId+" is invalid or doesn't exist.");
 				}
 			}
+			// There was no item reward
 			if(rewardedMoney>0) {
-				MobRewardsX.getEconomy().depositPlayer((Player) killer, rewardedMoney);
+				if(lastPlayerAttackers.get(e.getEntity())!=null)	
+					MobRewardsX.getEconomy().depositPlayer((Player) killer, rewardedMoney);
+				if(!soundPlayed)
+					soundPlayed = playNotifications(killer, rewardedMoney, 0d, "", 0);
 			} else {
-				MobRewardsX.getEconomy().withdrawPlayer((Player) killer, Math.abs(rewardedMoney));
+				if(lastPlayerAttackers.get(e.getEntity())!=null)	
+					MobRewardsX.getEconomy().withdrawPlayer((Player) killer, Math.abs(rewardedMoney));
 			}
 		}
-		// Config: kill-assist = true
+		// Not killed by player
 		else {
+			// Config: kill-assist = true
 			if(plugin.getConfig().getBoolean("kill-assist")) {
+				
 				if(Math.random()<chance) {
 					ItemStack rewardedItem = getItem(itemsSection, itemId);
 					if(rewardedItem!=null) {
-						lastPlayerAttackers.get(e.getEntity()).getInventory().addItem(rewardedItem);
+						rewardItem(rewardedItem, lastPlayerAttackers.get(e.getEntity()), rewardedMoney, chance);
+						soundPlayed = true;
 					} else {
 						Bukkit.getLogger().info("[MobRewardsX] The item at id "+itemId+" is invalid or doesn't exist.");
 					}
 				}
 				if(rewardedMoney>0) {
-					MobRewardsX.getEconomy().depositPlayer(lastPlayerAttackers.get(e.getEntity()), rewardedMoney);
+					if(lastPlayerAttackers.get(e.getEntity())!=null) {
+						if(!soundPlayed)
+							soundPlayed = playNotifications(lastPlayerAttackers.get(e.getEntity()), rewardedMoney, 0d, "", 0);
+						MobRewardsX.getEconomy().depositPlayer(lastPlayerAttackers.get(e.getEntity()), rewardedMoney);
+					}
 				} else {
-					MobRewardsX.getEconomy().withdrawPlayer(lastPlayerAttackers.get(e.getEntity()), Math.abs(rewardedMoney));
+					if(lastPlayerAttackers.get(e.getEntity())!=null) {
+						if(!soundPlayed)
+							soundPlayed = playNotifications(lastPlayerAttackers.get(e.getEntity()), rewardedMoney, 0d, "", 0);
+						MobRewardsX.getEconomy().withdrawPlayer(lastPlayerAttackers.get(e.getEntity()), Math.abs(rewardedMoney));
+					}
 				}
 			}
 		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private boolean rewardItem(ItemStack rewardedItem, Player killer, int rewardedMoney, double chance) {
+		boolean soundPlayed = false;
+		if(killer==null) {
+			return false;
+		}
+		if(rewardedItem.getItemMeta().hasDisplayName()) {
+			// Play notifications
+			soundPlayed = playNotifications(killer, rewardedMoney, chance, rewardedItem.getItemMeta().getDisplayName(), rewardedItem.getAmount());
+		} else {
+			soundPlayed = playNotifications(killer, rewardedMoney, chance, rewardedItem.getType().toString(), rewardedItem.getAmount());
+		}
+		HashMap<Integer, ItemStack> items = killer.getInventory().addItem(rewardedItem);
+		for(ItemStack item : items.values()) {
+			killer.getWorld().dropItem(killer.getLocation(), item);		
+		}
+		return soundPlayed;
+	}
+	
+	private boolean playNotifications(Player ply, int moneyReward, double itemChance, String itemName, int itemAmount) {
+		boolean playedSound = false;
+		if(moneyReward>0) {
+			if(MobRewardsX.moneySoundNotifications.get(ply)) {
+				if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.8.8")) {
+					ply.playSound(ply.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 0.8f);
+				} else {
+					ply.playSound(ply.getLocation(), Sound.valueOf("ORB_PICKUP"), 0.8f, 0.8f);
+				}
+				playedSound = true;
+			}
+			if(MobRewardsX.moneyMessageNotifications.get(ply)) {
+				if(MobRewardsX.getEconomy().currencyNameSingular().length()==1) {
+					ply.sendMessage(ChatColor.GREEN+"+"+ChatColor.GOLD+MobRewardsX.getEconomy().currencyNameSingular()+moneyReward);
+				} else if(MobRewardsX.getEconomy().currencyNameSingular().length()==0) {
+					ply.sendMessage(ChatColor.GREEN+"+"+ChatColor.GOLD+"$"+moneyReward);
+				} else {
+					ply.sendMessage(ChatColor.GREEN+"+"+ChatColor.GOLD+" "+MobRewardsX.getEconomy().currencyNamePlural());
+				}
+			}
+		}
+		if(itemChance>0) {
+			if(MobRewardsX.itemSoundNotifications.get(ply) && !playedSound) {
+				if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.8.8")) {
+					if(itemChance<=plugin.getConfig().getInt("rare-chance")) {
+						ply.playSound(ply.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.9f);
+					}
+					ply.playSound(ply.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 0.8f);
+				} else {
+					if(itemChance<=plugin.getConfig().getInt("rare-chance")) {
+						ply.playSound(ply.getLocation(), Sound.valueOf("ORB_PICKUP"), 0.5f, 0.9f);
+					}
+					ply.playSound(ply.getLocation(), Sound.valueOf("ORB_PICKUP"), 0.8f, 0.8f);
+				}
+				playedSound = true;
+			}
+			if(MobRewardsX.itemMessageNotifications.get(ply) || (MobRewardsX.rareItemMessageNotifications.get(ply) && itemChance<=plugin.getConfig().getInt("rare-chance"))) {
+				if(itemChance<=plugin.getConfig().getDouble("rare-chance")/100) {
+					if(MobRewardsX.rareItemMessageNotifications.get(ply) || MobRewardsX.itemMessageNotifications.get(ply)) {
+						ply.sendMessage(placeholderReplace(plugin.getConfig().getString("rare-reward-message"), itemName, itemChance, itemAmount));
+					}
+				} else if(MobRewardsX.itemMessageNotifications.get(ply)) {
+					ply.sendMessage(placeholderReplace(plugin.getConfig().getString("normal-reward-message"), itemName, itemChance, itemAmount));
+				}
+			}
+		}
+		return playedSound;
 	}
 	
 	private int getRewardedMoney(LivingEntity mob) {
@@ -104,6 +195,10 @@ public class OnMobDamaged implements Listener {
 			return mobSection.getInt("money-rewarded");
 		}
 		return 0;
+	}
+	
+	private String placeholderReplace(String str, String itemName, double itemChance, int itemAmount) {
+		return str.replaceAll("%chance%", Double.toString(itemChance*100).replaceAll("(\\.0)+?$","")).replaceAll("%item%", itemName).replaceAll("%amount%", Integer.toString(itemAmount));
 	}
 	
 	private ConfigurationSection getMobSection(LivingEntity mob) {
@@ -118,7 +213,7 @@ public class OnMobDamaged implements Listener {
 				continue;
 			}
 			
-			// Binary search
+			// search
 			for(int i = mobTypes.length/2; i<mobTypes.length; i++) {
 				if(mobsSection.getConfigurationSection(mobTypes[i]).contains(mob.getType().toString().toLowerCase())) {
 					return mobsSection.getConfigurationSection(mobTypes[i]).getConfigurationSection(mob.getType().toString().toLowerCase());
@@ -153,6 +248,7 @@ public class OnMobDamaged implements Listener {
 			ItemStack returnedItem = new ItemStack(material, quantity);
 			for(String s : enchantSection.getKeys(false)) {
 				Enchantment ench = null;
+				// Get enchantments depending on version
 				if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.12.2")) {
 					ench = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(s));
 				} else if(VersionUtil.versionGreaterThan(Bukkit.getVersion(), "1.11"))  {
