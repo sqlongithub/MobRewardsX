@@ -5,20 +5,42 @@ neutral: true # i.e wolf
 hostile: true # i.e zombie
 boss: true # i.e ender dragon
 
+# Notifications
+
+# Note: If you have rare items off, but item messages on then you will only get notifications for non-rare items.
+# If you have all message notifications, rare item messages, and item messages off, then you will only get notifications for money rewards.
+all-sound-toggled-default: true
+# Should players get a little *ding* sound whenever they get an item as a reward
+item-sound-toggled-default: true 
+# Should players get a little *ding* sound whenever they recieve money as a reward
+money-sound-toggled-default: true
+
+# Should players get chat notifications for items, money, and rare items rewards
+all-message-toggled-default: false
+# Should players get chat notifications for items, and rare items 
+item-message-toggled-default: true
+# Should players get chat notifications for rare items
+rare-item-message-toggled-default: true 
+# Should players get a message in chat when they recieve money
+money-message-toggled-default: false 
+
+rare-chance: 20 # The maxmimum chance of an item reward for it to be considered rare. Can be floating.
+# please dont remove the 2 lines below. 
+rare-reward-message: "§9§lRARE DROP! §6%item% §a(%chance%%)" # Placeholders: %item% The name of the item, includes the color from the item name -- %chance% The drop chance of an item (i.e 25%, 0.1%)
+normal-reward-message: "§7+%amount%x §6%item%"
+
+
 kill-assist: true # Should a player should be rewarded, even though they only damaged the mob, which then was killed by a block or fall damage?
 
 # Here you can define custom items that can get dropped
 # when mobs are killed. 
 
 items:
-   0: # fallback
-      material: air
-      quantity: 0
    1: # id 1
       material: gold_ingot # a minecraft item id (i.e diamond_sword)
       quantity: 1
       name: "§6Reward Item"
-      chance: 50 # 50% default chance for this item to get dropped
+      chance: 50 # 50% default chance for this item to get dropped, can be floating (i.e 0.1%)
       lore: # Not required, can be removed
          - "" # An empty lore line, so there is a gap between the enchants and the lore, i just think it looks nice.
          - "§aLine 1 of the lore"
@@ -44,7 +66,7 @@ mobs:
       cow:
          money-rewarded: 10
          item-rewarded: 1 # type a custom item id, one of those you wrote above in the items section 
-         chance: 40 # overwrites the default 50% for this item, it is now 40%
+         chance: 40 # overwrites the default 50% for this item, it is now 40%, can be floating
       donkey:
       fox:
       horse:
@@ -54,10 +76,6 @@ mobs:
       parrot:
       pig:
          money-rewarded: 10
-      piglin: # adult is not passive
-         baby: 
-      polar_bear:
-         baby: # adult is not passive
       pufferfish:
       rabbit:
       sheep:
@@ -77,9 +95,7 @@ mobs:
       llama:
       panda:
       piglin:
-         adult:
-      polar_bear:
-         adult:
+      polar_bear: 
       spider:
       wolf:
       zombified_piglin: # aka. zombie pigman

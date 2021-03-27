@@ -1,21 +1,56 @@
-name: MobRewardsX
-version: 1.0
-main: me.sql.mobrewardsx.MobRewardsX
 author: imSQL
-description: A plugin that gives players rewards for killing mobs
-website: https://github.com/sqlongithub
-commands:
-    mobrewardsx:
-        description: MobRewardsX
-        alias: [mrx, mobrewards]
-        permission: mrx.mrx
-        usage: "§cUsage: /<command> [about|info|help]"
-permissions:
-    mrx.mrx:
-        description: "Allows the player to interact with MRX"
-        default: false
-    mrx.*:
-        description: "Gives the player superuser permissions for MRX"
-        default: false
-        children:
-            - mrx.mrx
+description: "A plugin that gives players rewards for killing mobs"
+main: me.sql.mobrewardsx.MobRewardsX
+name: MobRewardsX
+version: ${project.version}
+website: "https://github.com/sqlongithub"
+commands: 
+  mobrewardsx: 
+    alias: 
+      - mrx
+      - mobrewards
+    description: MobRewardsX
+    permission: mrx.about
+    usage: "�cUsage: /<command> [about|info|help]"
+  tc: 
+    alias: togglechat
+    description: "Toggles chat notifications"
+    usage: "�cUsage: /<command> [item|i|rare|r|money|m]"
+  ts: 
+    alias: togglesound
+    description: "Toggles sound notifications"
+    usage: "�cUsage: /<command> [item|i|money|m]"
+  mob: 
+    description: "Change and view rewards of mobs"
+    usage: "�cUsage: /<command> <mob> [delrewards|setmoneyreward|setitemreward|setchance] [money|id|chance]"
+permissions: 
+  mrx.*: 
+    children: 
+      - mrx.help
+      - mrx.about
+      - mrx.mob
+      - mrx.mob.deleterewards
+      - mrx.mob.setmoneyreward
+      - mrx.mob.setitemreward
+      - mrx.mob.setchance
+    default: op
+    description: "Gives the player superuser permissions for MRX"
+  mrx.about: 
+    default: op
+    description: "Allows the player to see information about MRX"
+  mrx.help: 
+    default: op
+    description: "Allows the player to see usage on MRX"
+  mrx.deleterewards:
+    default: op
+    description: "Allows the player to delete rewards for a mob"
+  mrx.setmoneyreward:
+    default: op
+    description: "Allows the player to set the money reward for a mob"
+  mrx.setitemreward:
+    default: op
+    description: "Allows the player to set the item reward for a mob"
+  mrx.setchance:
+    default: op
+    description: "Allows the player to set the item reward chance for a mob"
+    
